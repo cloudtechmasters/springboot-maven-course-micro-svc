@@ -14,7 +14,7 @@ spec:
       labels:
         app: springboot
     spec:
-	    imagePullSecrets:
+      imagePullSecrets:
         - name: registry-secret
       containers:
       - name: springboot

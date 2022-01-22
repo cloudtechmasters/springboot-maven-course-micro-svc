@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-deployment
+  labels:
+    app: springboot
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: springboot
+  template:
+    metadata:
+      labels:
+        app: springboot
+    spec:
+	    imagePullSecrets:
+        - name: registry-secret
+      containers:
+      - name: springboot
+        image: jan22azuredevopsregistry.azurecr.io/springboot-maven-course-micro-svc:4
+        ports:
+        - containerPort: 8080

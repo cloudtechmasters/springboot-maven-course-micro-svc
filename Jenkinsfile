@@ -33,6 +33,26 @@ pipeline{
                    sh 'mvn clean package'
                 }
             }
+		stage('Generate kubeconfig for the cluster') {
+        steps {
+        script {
+            env.KUBECONFIG = "${artifacts_dir}/${eks_cluster_name}-kubeconfig"
+            sh 'chmod +x ${WORKSPACE}/generate_kubeconfig_eks.sh'
+        }
+        sh(script: '${WORKSPACE}/generate_kubeconfig_eks.sh', label: 'Generate kubeconfig file')
+        }
+    }
+    
+    stage('Get the cluster details') {
+        steps {
+        script {
+            sh '''kubectl apply -f deployment.yml 
+                  kubectl apply -f service.yml
+                  kubectl get all
+                '''
+        }
+        }
+    }
         }
     post {
 	    cleanup {

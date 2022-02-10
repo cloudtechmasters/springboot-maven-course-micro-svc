@@ -34,4 +34,9 @@ pipeline{
                 }
             }
         }
+    post {
+	    cleanup {
+	          cleanWs(cleanWhenFailure: false)
+	    }
+    }
 }

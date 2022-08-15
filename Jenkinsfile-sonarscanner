@@ -1,0 +1,36 @@
+pipeline{
+    agent any
+    tools{
+        maven 'maven-3.8.6'
+    }
+    options {
+    buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '30'))
+  }
+    stages{
+        stage('get code from github'){
+            steps{
+                git branch: "${params.branch}", url: "${params.url}"
+            }
+        }
+        stage('build maven project'){
+            steps{
+                sh 'mvn clean package'
+            }
+        }
+        stage('sonarqube analysis'){
+            steps{
+                withSonarQubeEnv(installationName: 'sonar-9') {
+   sh "/tmp/sonar-scanner-4.7.0.2747-linux/bin/sonar-scanner   -Dsonar.projectKey=hellospringboot -Dsonar.projectName=hellospringboot -Dsonar.sourceEncoding=UTF-8 -Dsonar.sources=src"
+    }
+            }
+        }
+        stage("Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        
+    }
+}

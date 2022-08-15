@@ -1,0 +1,81 @@
+git branch: 'master', url: 'https://github.com/cloudtechmasters/springboot-maven-course-micro-svc.git'
+
+1.assume there is a s3 bucket already we need to upload files into the s3 bucket
+
+if you want u can segerate jar files as snapshot or release also
+
+in this case under s3 bucket we can create two folders
+
+or we can even create two s3 buckets as well
+
+vamsikrm-java-s3-artifacts
+maven-snapshots
+maven-releases
+
+
+in your maven project pom.xml verion tag if it contains snapshot in its name they we assume that it is snapshot build
+if verion is not having snapshot in its name then we consider that as releease version
+
+<groupId>com.cloudtechmasters</groupId>
+	<artifactId>springboot-maven-course-micro-svc</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>springboot-maven-course-micro-svc</name>
+	
+	
+	
+aws s3api put-object --bucket text-content --key dir-1/my_images.tar.bz2 --body my_images.tar.bz2
+
+aws s3api put-object --bucket vamsikrm-java-s3-artifacts --key maven-snapshots/springboot-maven-course-micro-svc-0.0.1-SNAPSHOT.jar --body target/springboot-maven-course-micro-svc-0.0.1-SNAPSHOT.jar
+
+now i dont want to add role to jenkins server directly instead i want to use a dedicated iam user with prviliges when needed
+###############approach1 pipeline###############
+pipeline{
+    agent any
+    tools{
+        maven 'maven-3.8.6'
+    }
+    stages{
+       stage('checkout project'){
+           steps{
+               git 'https://github.com/cloudtechmasters/springboot-maven-course-micro-svc.git'
+           }
+       } 
+       stage('build maven project'){
+           steps{
+               sh 'mvn clean package'
+           }
+       }
+       stage('upload artifacts to amazon s3 bucket'){
+           steps{
+               sh 'aws s3api put-object --bucket vamsikrm-java-s3-artifacts --key maven-snapshots/springboot-maven-course-micro-svc-0.0.1-SNAPSHOT.jar --body target/springboot-maven-course-micro-svc-0.0.1-SNAPSHOT.jar'
+           }
+       }
+    }
+}
+
+##################approach 2####################
+pipeline{
+    agent any
+    tools{
+        maven 'maven-3.8.6'
+    }
+    stages{
+       stage('checkout project'){
+           steps{
+               git 'https://github.com/cloudtechmasters/springboot-maven-course-micro-svc.git'
+           }
+       } 
+       stage('build maven project'){
+           steps{
+               sh 'mvn clean package'
+           }
+       }
+       stage('upload artifacts to amazon s3 bucket'){
+           steps{
+               withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',credentialsId: 'aws-ecr-credentials',accessKeyVariable: 'AWS_ACCESS_KEY_ID',   secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                sh 'aws s3api put-object --bucket vamsikrm-java-s3-artifacts --key maven-snapshots/springboot-maven-course-micro-svc-0.0.1-SNAPSHOT.jar --body target/springboot-maven-course-micro-svc-0.0.1-SNAPSHOT.jar'
+               }
+           }
+       }
+    }
+}

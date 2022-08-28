@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-deployment
+  labels:
+    app: springboot
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: springboot
+  template:
+    metadata:
+      labels:
+        app: springboot
+    spec:
+      containers:
+      - name: springboot-container
+        image: cloudtechmasters/springboot-maven-course-micro-svc:latest
+        ports:
+        - containerPort: 8080
+		livenessProbe:
+		  httpGet:
+			path: /course-svc/actuator/health
+			port: 8080
+		  initialDelaySeconds: 60
+		  periodSeconds: 5
+		  successThreshold: 1
+		  failureThreshold: 3
+		  timeoutSeconds: 10

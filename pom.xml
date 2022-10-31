@@ -8,6 +8,7 @@
 		<version>2.5.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	<packaging>jar</packaging>
 	<groupId>com.cloudtechmasters</groupId>
 	<artifactId>springboot-maven-course-micro-svc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>

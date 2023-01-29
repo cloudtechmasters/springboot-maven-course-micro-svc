@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: springboot
-        image: 358959533981.dkr.ecr.us-east-1.amazonaws.com/bigdayrepo:7
+        image: 811502318109.dkr.ecr.us-east-1.amazonaws.com/devopsdemocicd:5
         ports:
         - containerPort: 8080

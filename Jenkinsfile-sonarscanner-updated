@@ -4,9 +4,9 @@ pipeline{
         maven 'maven-3.9.0'
     }
     stages{
-        stage('git checkout'){
+        stage('git checkout using ssh'){
             steps{
-               git branch: 'master', url: 'https://github.com/cloudtechmasters/springboot-maven-course-micro-svc.git' 
+                git branch: 'master', credentialsId: 'jenkins-ssh-private-key', url: 'git@github.com:cloudtechmasters/springboot-maven-course-micro-svc.git'
             }
         }
         stage('build maven project'){

@@ -28,3 +28,19 @@ jobs:
     # Runs a single command using the runners shell
     - name: Send greeting
       run: echo "Hello ${{ github.event.inputs.name }}"
+  
+  deploy-to-acr:
+    name: 'deploy-to-acr'
+    runs-on: ubuntu-latest
+    env:
+      ResourceGroupName: myResourceGroupName
+      ResourceGroupLocation: "eastus2"
+      AcrName: vamsikrmregistry
+    environment: production
+    steps:
+ 
+    - uses: actions/checkout@v2
+ 
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}

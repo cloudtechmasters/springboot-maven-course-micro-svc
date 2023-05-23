@@ -1,5 +1,5 @@
 ---
- - hosts: ds
+ - hosts: ciservers
    become: true
    tasks:
      - name: Log into AWS ECR docker registry

@@ -1,2 +1,2 @@
 [ciservers]
-13.234.76.158 ansible_user=admin2
+13.234.76.158 ansible_user=root

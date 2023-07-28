@@ -3,6 +3,8 @@ kind: VirtualService
 metadata:
   name: my-virtualservice
 spec:
+  hosts:
+    - "*" # Your domain or IP for the ingress
   gateways:
     - my-gateway
   http:

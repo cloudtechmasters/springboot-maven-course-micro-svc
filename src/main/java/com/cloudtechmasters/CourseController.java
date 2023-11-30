@@ -19,6 +19,6 @@ public class CourseController {
 
     @GetMapping("/getAllDevopsTools")
     public List<String> getAllDevopsTools(){
-        return Arrays.asList("hi this yaswanth frist github project''''''"y {netstat -tulnp} java project deploymentversion-1");
+        return Arrays.asList("hi this yaswanth frist github project yasu {netstat -tulnp} java project deploymentversion-1");
     }
 }

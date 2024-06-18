@@ -36,4 +36,7 @@ jobs:
       run: |
         docker buildx build --platform linux/amd64,linux/arm64 -t cloudtechmasters/springboot-maven-course-micro-svc:latest .
         docker login -u cloudtechmasters -pManager#436
-        docker push cloudtechmasters/springboot-maven-course-micro-svc:latest
+    - name: List Docker Images
+      run: docker images
+    - name: Push Docker Image
+      run: docker push cloudtechmasters/springboot-maven-course-micro-svc:latest

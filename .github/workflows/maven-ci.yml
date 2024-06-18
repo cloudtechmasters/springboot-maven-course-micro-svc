@@ -41,7 +41,10 @@ jobs:
         password: ${{ secrets.AZURE_ACR_PASSWORD }}
      
     - name: Buld and Push to ACR
-      run:
-       docker image build -t vamsikrmjune17regdemo.azurecr.io/springboot-maven-course-micro-svc:1 .
-       docker image push vamsikrmjune17regdemo.azurecr.io/springboot-maven-course-micro-svc:1
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        build-args: |
+            version=${{ steps.tag.outputs.tag }}
+        tags: vamsikrmjune17regdemo.azurecr.io/springboot-maven-course-micro-svc:1
     

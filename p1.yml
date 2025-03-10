@@ -1,0 +1,12 @@
+---
+ - hosts: ciservers
+   become: true
+   tasks:
+     - name: Log into AWS ECR docker registry
+       ansible.builtin.shell: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 400150977086.dkr.ecr.ap-south-1.amazonaws.com 
+     - name: pull ecr image
+       command: docker pull 400150977086.dkr.ecr.ap-south-1.amazonaws.com/springboot:38
+     - name: Delete existing container
+       command: docker rm -f tt
+     - name: Create a docker container
+       command: docker run -itd --name tt -p 8080:8080 400150977086.dkr.ecr.ap-south-1.amazonaws.com/springboot:38
